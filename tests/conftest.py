@@ -1,9 +1,7 @@
-import configparser
 import pytest
 from fixtures.remote import Remote
+from fixtures import conf
 
-conf = configparser.ConfigParser()
-conf.read('config.ini')
 host = conf.get('environment', 'host_ip')
 
 
