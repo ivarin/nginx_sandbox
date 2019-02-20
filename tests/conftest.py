@@ -7,7 +7,7 @@ conf.read('config.ini')
 host = conf.get('environment', 'host_ip')
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def remote():
     with Remote(host) as remote:
         yield remote
