@@ -1,6 +1,6 @@
 import pytest
-from fixtures.remote import Remote
-from fixtures import conf
+from tools.remote import Remote
+from tools import conf
 
 host = conf.get('environment', 'host_ip')
 

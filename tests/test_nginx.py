@@ -1,6 +1,6 @@
 import requests
 import re
-from fixtures import conf
+from tools import conf
 
 addr = 'http://terraform-example-elb-40329900.us-west-2.elb.amazonaws.com'
 
