@@ -27,4 +27,4 @@ def test_worker_config(remote):
     # TODO: config parser
 
 def test_nginx_log(remote):
-    
+    pass
