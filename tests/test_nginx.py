@@ -47,6 +47,6 @@ def test_nginx_log(remote, name):
     last_access = remote.run('tail -1 %s' % access_log)['stdout']
     r = requests.get(name)
     access = remote.run('tail -1 %s' % access_log)['stdout']
-    assert re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', last_access)
+    assert re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', access)
     assert access != last_access
     assert 'python-requests' in access
