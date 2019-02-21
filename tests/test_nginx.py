@@ -5,11 +5,11 @@ from tools import conf
 # addr = 'http://terraform-example-elb-40329900.us-west-2.elb.amazonaws.com'
 
 
-def test_nginx_accessible(address):
+def test_nginx_accessible(name):
     """
     Nginx is accessible through external DNS
     """
-    r = requests.get(address)
+    r = requests.get(name)
     assert r.status_code == 200
     assert 'Welcome to nginx!' in str(r.content)
 
@@ -32,10 +32,10 @@ def test_worker_config(remote):
     # TODO: config parser
 
 
-def test_nginx_log(remote):
+def test_nginx_log(remote, name):
     access_log = conf.get('nginx', 'access_log')
     last_access = remote.run('tail -1 %s' % access_log)['stdout']
-    r = requests.get(addr)
+    r = requests.get(name)
     access = remote.run('tail -1 %s' % access_log)['stdout']
     assert access != last_access
     assert 'python-requests' in access

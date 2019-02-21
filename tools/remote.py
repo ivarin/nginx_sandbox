@@ -1,6 +1,6 @@
 from paramiko import SSHClient, AutoAddPolicy
 import time
-from tools import conf
+from tools import conf, logger
 
 
 class Remote:
@@ -13,6 +13,7 @@ class Remote:
     def connect(self):
         client = SSHClient()
         client.set_missing_host_key_policy(AutoAddPolicy)
+        logger.info('\nConnecting to %s' % self.host)
         for _ in range(self.tries):
             try:
                 client.connect(
@@ -22,18 +23,21 @@ class Remote:
                 )
                 return client
             except Exception as e:
-                print(e)
+                logger.info('%s occurred') % e
                 time.sleep(10)
 
     def run(self, cmd, sudo=True):
         if sudo:
             cmd = 'sudo %s' % cmd
+        logger.info('\nRunning %s' % cmd)
         _, stdout, stderr = self.connection.exec_command(cmd, get_pty=True)
         out = {
             'stdout': stdout.read().decode('utf-8'),
             'stderr': stderr.read().decode('utf-8'),
             'es': stdout.channel.recv_exit_status()
         }
+        if out['stderr']:
+            logger.info(out['stderr'])
         return out
 
     def __enter__(self):
