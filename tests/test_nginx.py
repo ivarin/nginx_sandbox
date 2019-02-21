@@ -2,8 +2,6 @@ import requests
 import re
 from tools import conf
 
-# addr = 'http://terraform-example-elb-40329900.us-west-2.elb.amazonaws.com'
-
 
 def test_nginx_accessible(name):
     """
@@ -15,17 +13,26 @@ def test_nginx_accessible(name):
 
 
 def test_nginx_workers(remote):
+    """
+    nginx workers are running
+    """
     out = remote.run('ps aux | grep nginx')
     assert 'master process' in out['stdout']
     assert 'worker process' in out['stdout']
 
 
 def test_nginx_port(remote):
+    """
+    check nginx listens on port 80
+    """
     out = remote.run('netstat -tulpn | grep :80')['stdout']
-    assert re.search(r'(tcp\s .*/nginx).*\n(tcp6).*(nginx)', out)
+    assert re.search(r'(tcp\s .*/nginx).*\n(tcp6\s .*/nginx)', out)
 
 
 def test_worker_config(remote):
+    """
+    validate uncommented setting in config file
+    """
     conf_file = conf.get('nginx', 'config')
     out = remote.run('cat %s' % conf_file)['stdout']
     assert re.search(r'\nworker_processes auto;', out)
@@ -33,9 +40,13 @@ def test_worker_config(remote):
 
 
 def test_nginx_log(remote, name):
+    """
+    check proper access logging
+    """
     access_log = conf.get('nginx', 'access_log')
     last_access = remote.run('tail -1 %s' % access_log)['stdout']
     r = requests.get(name)
     access = remote.run('tail -1 %s' % access_log)['stdout']
+    assert re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', last_access)
     assert access != last_access
     assert 'python-requests' in access

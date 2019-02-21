@@ -2,11 +2,10 @@ import pytest
 from tools.remote import Remote
 from tools import conf
 
-host = conf.get('environment', 'host_ip')
-
 
 def pytest_addoption(parser):
-    parser.addoption("--name", action="store")
+    parser.addoption('--name', action='store', default=conf.get('environment', 'name'))
+    parser.addoption('--address', action='store', default=conf.get('environment', 'host_ip'))
 
 
 @pytest.fixture
@@ -18,6 +17,6 @@ def name(request):
 
 
 @pytest.fixture(scope='session')
-def remote():
-    with Remote(host) as remote:
+def remote(request):
+    with Remote(request.config.option.address) as remote:
         yield remote

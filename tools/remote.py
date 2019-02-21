@@ -1,6 +1,7 @@
 from paramiko import SSHClient, AutoAddPolicy
 import time
 from tools import conf, logger
+import os
 
 
 class Remote:
@@ -19,7 +20,7 @@ class Remote:
                 client.connect(
                     hostname=self.host,
                     username='ubuntu',
-                    key_filename=conf.get('environment', 'ssh_key')
+                    key_filename=os.path.expanduser(conf.get('environment', 'ssh_key'))
                 )
                 return client
             except Exception as e:
