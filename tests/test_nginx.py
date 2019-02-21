@@ -5,11 +5,11 @@ from tools import conf
 addr = 'http://terraform-example-elb-40329900.us-west-2.elb.amazonaws.com'
 
 
-def test_nginx_accessible():
+def test_nginx_accessible(address):
     """
     Nginx is accessible through external DNS
     """
-    r = requests.get(addr)
+    r = requests.get(address)
     assert r.status_code == 200
     assert 'Welcome to nginx!' in str(r.content)
 
