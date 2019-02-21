@@ -2,7 +2,7 @@ import requests
 import re
 from tools import conf
 
-addr = 'http://terraform-example-elb-40329900.us-west-2.elb.amazonaws.com'
+# addr = 'http://terraform-example-elb-40329900.us-west-2.elb.amazonaws.com'
 
 
 def test_nginx_accessible(address):

@@ -1,5 +1,6 @@
-from paramiko import SSHClient, AutoAddPolicy, RSAKey
+from paramiko import SSHClient, AutoAddPolicy
 import time
+from tools import conf
 
 
 class Remote:
@@ -17,7 +18,7 @@ class Remote:
                 client.connect(
                     hostname=self.host,
                     username='ubuntu',
-                    key_filename='/Users/ivarin/.ssh/terraform',
+                    key_filename=conf.get('environment', 'ssh_key')
                 )
                 return client
             except Exception as e:
